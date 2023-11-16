@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: datav1c
+ labels:
+   app: datav1c
+spec:
+ selector:
+  matchLabels:
+   app: datav1c
+ template:
+  metadata:
+   labels:
+    app: datav1c
+  spec:  # Corrected indentation here
+   containers:
+   - image: tommywu6/testflask:latest
+     name: python-flask
+     imagePullPolicy: Always
+     ports:
+       - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: datav1c-svc
+spec:
+  ports:
+    - name: "datav1c"
+      targetPort: 80
+      port: 80
+      nodePort: 30275
+      protocol: TCP
+  selector:
+    app: datav1c
+  type: NodePort
